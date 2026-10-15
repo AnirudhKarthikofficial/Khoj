@@ -1,0 +1,10 @@
+{
+  "name": "khoj",
+  "version": "1.0.0",
+  "description": "Khoj - a safe, friendly search engine for kids",
+  "private": true,
+  "scripts": {
+    "start": "node --env-file=.env server.js"
+  },
+  "engines": { "node": ">=20.6" }
+}
