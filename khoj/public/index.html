@@ -13,7 +13,27 @@
 </head>
 <body>
 <div id="app"></div>
-<dialog id="lb" aria-label="Picture viewer"></dialog>
-<script src="app.js"></script>
+<main id="res" class="res" hidden>
+  <p id="blocked" class="msg" hidden>Oops! Khoj can't search for that. Try animals, space or dinosaurs!</p>
+  <section id="answer" class="answer" hidden>
+    <h2>Khoj says</h2>
+    <p id="ans"></p>
+    <p id="srcs" class="srcs"></p>
+    <button id="say" class="say" type="button" hidden>🔊 Read to me</button>
+    <small>This answer is written by a computer. Check it with a grown-up.</small>
+  </section>
+  <div id="cse">
+    <div class="gcse-searchresults-only" data-gname="khoj" data-safeSearch="active"
+         data-enableImageSearch="true" data-linkTarget="_blank" data-personalizedAds="false"
+         data-noResultsString="Nothing found. Try different words!"></div>
+  </div>
+</main>
+<footer class="foot">
+  <p>Khoj has no accounts and doesn't save what you search for.</p>
+  <p>Our filters are strong, but not perfect. If you see something weird, tell a grown-up.</p>
+</footer>
+<dialog id="lb"></dialog>
+<script src="khoj.js"></script>
+<script async src="https://cse.google.com/cse.js?cx=b4629e396636f4b3d"></script>
 </body>
 </html>

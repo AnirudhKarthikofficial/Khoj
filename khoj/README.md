@@ -28,3 +28,10 @@ Khoj uses Google if both Google values are set, otherwise Brave.
 4. Strict content-security policy, no cookies, no accounts, no search logging
 5. Daily search cap (`DAILY_LIMIT`) and per-visitor rate limit so the free quota can't run out
 Note: your search provider still receives the search text.
+
+## Google mode (default page)
+`public/index.html` shows **Google Programmable Search** results (SafeSearch on, curated sites,
+no API key) plus a short **"Khoj says"** answer from the Gemini API grounded with Google Search.
+- Engine ID is set in `public/index.html` (`cx=`). Engine settings: add sites to search, turn on Image search + SafeSearch.
+- Set `GEMINI_API_KEY` (free key at aistudio.google.com/apikey). Without it, the answer box simply stays hidden.
+- The old API-based page is still at `/api.html` (needs Brave or an older Google Custom Search project).

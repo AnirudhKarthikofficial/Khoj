@@ -86,3 +86,19 @@ dialog .x{position:absolute;top:10px;right:12px;border:3px solid var(--ink);back
 .foot{max-width:680px;margin:30px auto 0;padding:0 20px 36px;text-align:center;font-size:15px;color:#3b4778}
 .foot p{margin:4px 0}
 @media (max-width:560px){.logo.big{font-size:64px}.card{flex-direction:column-reverse}.card .thumb{width:100%;height:150px}}
+
+/* "Khoj says" + Google results skin */
+.answer{background:#fff;border:3px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 var(--ink);padding:16px 20px;margin:0 0 20px}
+.answer h2{margin:0 0 6px;font-size:20px}
+.answer p{margin:0 0 8px}
+.answer .srcs{font-size:15px}
+.answer .srcs a{margin-right:12px;color:#5b3fe0}
+.answer small{display:block;margin-top:8px;color:#4a5588}
+body.blocked #cse,body.blocked #answer{display:none}
+.gsc-control-cse{background:none!important;border:0!important;padding:0!important;font-family:Lexend,system-ui,sans-serif!important}
+.gsc-webResult.gsc-result,.gsc-imageResult{background:#fff!important;border:3px solid var(--ink)!important;border-radius:16px!important;padding:12px 16px!important;margin:0 0 14px!important}
+.gs-title,.gs-title *{color:#5b3fe0!important;font-size:21px!important;font-weight:600!important;text-decoration:none!important}
+.gs-snippet{color:var(--ink)!important;font-size:17px!important}
+.gsc-url-top,.gs-visibleUrl{color:#4a5588!important}
+.gsc-tabHeader.gsc-tabhActive{border-color:var(--ink)!important;color:var(--ink)!important}
+.gsc-cursor-page{font-size:18px!important;padding:6px 10px!important}

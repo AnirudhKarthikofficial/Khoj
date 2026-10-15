@@ -3,23 +3,21 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { handle } = require('./lib/search');
+const ask = require('./lib/ask');
 
 const PUB = path.join(__dirname, 'public') + path.sep;
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml' };
-const SEC = {
-  'Content-Security-Policy': "default-src 'self'; img-src 'self' https: data:; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
-  'Referrer-Policy': 'no-referrer',
-  'X-Content-Type-Options': 'nosniff',
-};
 
 http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://localhost');
-  for (const [k, v] of Object.entries(SEC)) res.setHeader(k, v);
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
 
-  if (u.pathname === '/api/search') {
-    const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
-    const out = await handle(Object.fromEntries(u.searchParams), ip);
+  if (u.pathname === '/api/search' || u.pathname === '/api/ask') {
+    const params = Object.fromEntries(u.searchParams);
+    const out = u.pathname === '/api/ask' ? { status: 200, body: await ask.handle(params, ip) } : await handle(params, ip);
     res.writeHead(out.status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     return res.end(JSON.stringify(out.body));
   }

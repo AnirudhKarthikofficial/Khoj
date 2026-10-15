@@ -156,4 +156,4 @@ async function handle(params, ip) {
   }
 }
 
-module.exports = { handle, UNSAFE };
+module.exports = { handle, UNSAFE, badDomain };
