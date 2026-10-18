@@ -3,7 +3,7 @@ const $ = (s) => document.querySelector(s);
 const app = $('#app');
 const UNSAFE = /\b(?:porn\w*|sex|sexy|sexual|sexually|sexting|xxx|nude\w*|nsfw|hentai|erotic\w*|fetish\w*|onlyfans|milf|boobs|nipples|penis|vagina|dildo|orgasm\w*|masturbat\w*|cum|slut\w*|whore|bitch\w*|fuck\w*|shit\w*|cock|pussy|dick|rape|raped|raping|rapist|gore|suicide|self.?harm|cocaine|heroin|meth|marijuana|cannabis|vape\w*|gambl\w*|casino\w*|betting|torture|beheading\w*)\b/i;
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let askToken = 0;
+let askToken = 0, featToken = 0;
 
 const TOPICS = [['🦁','Animals'],['🚀','Space'],['🦖','Dinosaurs'],['🔬','Science'],['➗','Math'],['🎨','Art'],
   ['🏰','History'],['⚽','Sports'],['🎵','Music'],['🌋','Volcanoes'],['🫀','Human body'],['🌎','Countries']];
@@ -121,6 +121,28 @@ async function ask(q) {
   } catch { if (my === askToken) box.hidden = true; }
 }
 
+const fcard = (r, first) => h('article', { class: 'fcard' },
+  r.thumb ? h('img', { src: r.thumb, alt: '', loading: 'lazy', referrerpolicy: 'no-referrer', onerror: (e) => e.target.remove() }) : null,
+  h('div', { class: 'fbody' },
+    h('a', { class: 't', href: r.url, target: '_blank', rel: 'noopener noreferrer' }, r.title),
+    first ? h('div', { class: 'badge' }, 'featured result') : null,
+    h('p', null, r.snippet),
+    h('div', { class: 'u' }, r.url)));
+
+async function featured(q, offset = 0) {
+  const my = offset ? featToken : ++featToken;
+  const box = $('#featured'), list = $('#flist'), btn = $('#more');
+  if (!offset) { list.replaceChildren(); box.hidden = true; }
+  try {
+    const d = await (await fetch('/api/featured?' + new URLSearchParams({ q, offset }))).json();
+    if (my !== featToken || (!d.items?.length && !offset)) return;
+    d.items.forEach((r, i) => list.append(fcard(r, !offset && i === 0)));
+    box.hidden = false;
+    btn.hidden = !d.more;
+    btn.onclick = () => { btn.disabled = true; featured(q, d.next).finally(() => { btn.disabled = false; }); };
+  } catch {}
+}
+
 function home() {
   const [fact, fq] = FACTS[Math.floor(Date.now() / 864e5) % FACTS.length];
   app.replaceChildren(h('main', { class: 'home' },
@@ -140,15 +162,17 @@ function render() {
   const q = (new URLSearchParams(location.search).get('q') || '').trim().slice(0, 100);
   document.title = q ? q + ' – Khoj' : 'Khoj – Search made safe for kids';
   window.speechSynthesis?.cancel();
-  if (!q) { home(); $('#res').hidden = true; return; }
+  document.body.classList.toggle('home', !q);
+  if (!q) { home(); return; }
   app.replaceChildren(h('header', { class: 'top' }, logo('small'), bar(q)));
-  $('#res').hidden = false;
   const bad = UNSAFE.test(q);
   $('#blocked').hidden = !bad;
   document.body.classList.toggle('blocked', bad);
   $('#answer').hidden = true;
+  $('#featured').hidden = true;
   if (bad) return;
   ask(q);
+  featured(q);
   exec(q);
 }
 

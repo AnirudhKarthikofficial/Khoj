@@ -102,3 +102,17 @@ body.blocked #cse,body.blocked #answer{display:none}
 .gsc-url-top,.gs-visibleUrl{color:#4a5588!important}
 .gsc-tabHeader.gsc-tabhActive{border-color:var(--ink)!important;color:var(--ink)!important}
 .gsc-cursor-page{font-size:18px!important;padding:6px 10px!important}
+
+/* featured results (Kiddle-style) + keep Google box rendered while on the home view */
+body.home #res{position:absolute;left:-9999px;top:0;width:800px}
+body.blocked #featured{display:none}
+.featured{margin:0 0 20px}
+.fcard{display:flex;gap:16px;background:#fff;border:3px solid var(--ink);border-radius:20px;box-shadow:4px 4px 0 var(--ink);padding:14px;margin:0 0 14px}
+.fcard img{width:120px;height:120px;object-fit:cover;border:3px solid var(--ink);border-radius:14px;flex:none;background:var(--sky)}
+.fbody{min-width:0}
+.fcard .t{font-size:22px;font-weight:600;color:#5b3fe0;text-decoration:none;overflow-wrap:anywhere}
+.fcard .badge{display:inline-block;background:var(--sun);border:2px solid var(--ink);border-radius:999px;font-size:13px;padding:0 10px;margin:4px 0}
+.fcard p{margin:4px 0}
+.fcard .u{font-size:14px;color:#4a5588;overflow-wrap:anywhere}
+.more{display:block;width:100%;border:3px solid var(--ink);background:var(--sun);border-radius:16px;font-weight:600;font-size:18px;padding:14px;box-shadow:4px 4px 0 var(--ink)}
+@media (max-width:560px){.fcard img{width:84px;height:84px}}

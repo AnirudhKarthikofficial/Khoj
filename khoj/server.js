@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { handle } = require('./lib/search');
 const ask = require('./lib/ask');
+const featured = require('./lib/featured');
 
 const PUB = path.join(__dirname, 'public') + path.sep;
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -15,9 +16,11 @@ http.createServer(async (req, res) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
 
-  if (u.pathname === '/api/search' || u.pathname === '/api/ask') {
+  if (['/api/search', '/api/ask', '/api/featured'].includes(u.pathname)) {
     const params = Object.fromEntries(u.searchParams);
-    const out = u.pathname === '/api/ask' ? { status: 200, body: await ask.handle(params, ip) } : await handle(params, ip);
+    const out = u.pathname === '/api/ask' ? { status: 200, body: await ask.handle(params, ip) }
+      : u.pathname === '/api/featured' ? { status: 200, body: await featured.handle(params, ip) }
+      : await handle(params, ip);
     res.writeHead(out.status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     return res.end(JSON.stringify(out.body));
   }

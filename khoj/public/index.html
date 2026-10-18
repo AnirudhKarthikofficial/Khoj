@@ -11,9 +11,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Lexend:wght@400;600&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="home">
 <div id="app"></div>
-<main id="res" class="res" hidden>
+<main id="res" class="res">
   <p id="blocked" class="msg" hidden>Oops! Khoj can't search for that. Try animals, space or dinosaurs!</p>
   <section id="answer" class="answer" hidden>
     <h2>Khoj says</h2>
@@ -21,6 +21,10 @@
     <p id="srcs" class="srcs"></p>
     <button id="say" class="say" type="button" hidden>🔊 Read to me</button>
     <small>This answer is written by a computer. Check it with a grown-up.</small>
+  </section>
+  <section id="featured" class="featured" hidden>
+    <div id="flist"></div>
+    <button id="more" class="more" type="button" hidden>More featured results...</button>
   </section>
   <div id="cse">
     <div class="gcse-searchresults-only" data-gname="khoj" data-safeSearch="active"
