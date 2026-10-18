@@ -116,7 +116,3 @@ body.blocked #featured{display:none}
 .fcard .u{font-size:14px;color:#4a5588;overflow-wrap:anywhere}
 .more{display:block;width:100%;border:3px solid var(--ink);background:var(--sun);border-radius:16px;font-weight:600;font-size:18px;padding:14px;box-shadow:4px 4px 0 var(--ink)}
 @media (max-width:560px){.fcard img{width:84px;height:84px}}
-.gsc-modal-background-image{display:none!important}
-.gsc-results-wrapper-overlay{position:static!important;width:100%!important;height:auto!important;max-height:none!important;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important;background:none!important;overflow:visible!important;transform:none!important}
-.gsc-results-wrapper-overlay.gsc-results-wrapper-visible{display:block!important}
-.gsc-results-close-btn{display:none!important}
