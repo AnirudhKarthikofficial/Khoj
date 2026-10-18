@@ -1,3 +1,5 @@
+// Kiddle-style "featured results" from a fixed list of kid-safe sites (via Brave Search).
+// No BRAVE_API_KEY = this section stays hidden (the Google box still searches your kid sites).
 const { UNSAFE } = require('./search');
 const env = process.env;
 const NONE = { items: [], more: false, next: 0 };

@@ -86,18 +86,38 @@ function bar(q) {
   return form;
 }
 
-function speak(text, btn) {
+let player = null;
+function stopSpeech() {
+  if (player) { player.pause(); player = null; }
+  window.speechSynthesis?.cancel();
+  document.querySelectorAll('.say').forEach((b) => { b.dataset.on = ''; });
+}
+
+function browserSpeak(text, btn) {
   const s = window.speechSynthesis;
-  if (!s) return;
-  const wasOn = btn.dataset.on === '1';
-  s.cancel();
-  btn.dataset.on = '';
-  if (wasOn) return;
+  if (!s) { btn.dataset.on = ''; return; }
+  const en = s.getVoices().filter((v) => /^en/i.test(v.lang));
+  const pick = en.find((v) => /natural|neural|online/i.test(v.name))
+    || en.find((v) => /google us english|samantha|aria|jenny/i.test(v.name))
+    || en.find((v) => /^en-US/i.test(v.lang));
   const u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.9;
+  if (pick) u.voice = pick;
+  u.rate = 0.95;
   u.onend = () => { btn.dataset.on = ''; };
-  btn.dataset.on = '1';
   s.speak(u);
+}
+
+function speak(text, btn) {
+  const wasOn = btn.dataset.on === '1';
+  stopSpeech();
+  if (wasOn) return;
+  btn.dataset.on = '1';
+  const a = new Audio('/api/speak?' + new URLSearchParams({ text: text.slice(0, 500) }));
+  player = a;
+  const fallback = () => { if (player === a) { player = null; browserSpeak(text, btn); } };
+  a.onended = () => { btn.dataset.on = ''; if (player === a) player = null; };
+  a.onerror = fallback;
+  a.play().catch(fallback);
 }
 
 async function ask(q) {
@@ -161,7 +181,7 @@ function home() {
 function render() {
   const q = (new URLSearchParams(location.search).get('q') || '').trim().slice(0, 100);
   document.title = q ? q + ' – Khoj' : 'Khoj – Search made safe for kids';
-  window.speechSynthesis?.cancel();
+  stopSpeech();
   document.body.classList.toggle('home', !q);
   if (!q) { home(); return; }
   app.replaceChildren(h('header', { class: 'top' }, logo('small'), bar(q)));

@@ -5,6 +5,7 @@ const path = require('path');
 const { handle } = require('./lib/search');
 const ask = require('./lib/ask');
 const featured = require('./lib/featured');
+const speak = require('./lib/speak');
 
 const PUB = path.join(__dirname, 'public') + path.sep;
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -15,6 +16,13 @@ http.createServer(async (req, res) => {
   res.setHeader('Referrer-Policy', 'no-referrer');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
+
+  if (u.pathname === '/api/speak') {
+    const buf = await speak.handle(Object.fromEntries(u.searchParams), ip);
+    if (!buf) { res.writeHead(503); return res.end(); }
+    res.writeHead(200, { 'Content-Type': 'audio/wav', 'Cache-Control': 'public, max-age=86400' });
+    return res.end(buf);
+  }
 
   if (['/api/search', '/api/ask', '/api/featured'].includes(u.pathname)) {
     const params = Object.fromEntries(u.searchParams);
